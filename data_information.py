@@ -26,3 +26,4 @@ if __name__ == '__main__':
     get_data_information('/Users/alisultanov/Desktop/Обработанные фотки')
 
     
+dfsdfsd
