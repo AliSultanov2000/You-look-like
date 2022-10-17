@@ -1,4 +1,6 @@
 import os
+import shutil
+import pickle
 import numpy as np
 import cv2
 import face_recognition
@@ -21,21 +23,21 @@ def get_path(directory_path) -> list:
     return img_path_list
 
 
-def image_resize(img, width: int | float, height: int | float) -> np.ndarray:
+def image_resize(img: np.ndarray, width: int | float, height: int | float) -> np.ndarray:
     """Функция, которая изменяет размер изображений лица до стандартного размера"""
-    return cv2.resize(img, (width, height))  # изменение размера изображения
-
+    return cv2.resize(img, (width, height))
 
 
 def image_save(img: np.ndarray, save_img_path: str) -> None:
-    """Функция, которая сохраняет изображение и удаляет старое"""
+    """Функция, которая сохраняет изображение"""
     cv2.imwrite(save_img_path, img)
 
 
-# Todo: проверка данных в Celebrities(2) завершено - сделать функцию по переносу изобр-й из Celebrities(2) в Обработанные изображения
+# Todo: Получили эмбеддинги, успешно сохранили из в pickle
 
 def face_detect(directory_path: str, new_directory_path: str) -> None:
-    """Функция, которая отвечает за распознавание лиц на изображениях"""
+    """Функция, которая отвечает за распознавание лиц на изображениях,
+    вызывает ф-ии изменения размера изображения и сохранения в новой директории"""
     img_path_list = get_path(directory_path)
     for img_path in img_path_list:
         img = cv2.imread(img_path)  # здесь хранится тип np.ndarray
@@ -63,16 +65,22 @@ def face_detect(directory_path: str, new_directory_path: str) -> None:
             print(f'Обнаружено несколько лиц на изображении: {img_path}')
 
 
-
-def image_replace(img_path, final_img_path):
+def image_replace(directory_path: str) -> None:
     """Функция по переносу изображения из директории img_path в final_img_path"""
+    img_path_list = get_path(directory_path)
+    for img_path in img_path_list:
+        try:
+            new_img_path = img_path.replace('Celebrities(2)', 'Обработанные фотки')
+            shutil.move(img_path, new_img_path)
+        except FileNotFoundError:
+            print(f'Не существует директории для этого изображения: {img_path}')
 
 
-
-def get_id(persons: list | tuple) -> dict:
+def get_id(directory_path: str) -> dict:
     """Функция, которая по каждому человеку получает id значение и сохраняет в словарь"""
     counter = 0
     id_dict = {}
+    persons = os.listdir(directory_path)
     for person in persons:
         if person not in id_dict:
             id_dict[person] = counter
@@ -82,7 +90,55 @@ def get_id(persons: list | tuple) -> dict:
     return id_dict
 
 
+id_dict = get_id('/Users/alisultanov/Desktop/Обработанные фотки')
+print(id_dict)
+
+def get_embeddings(directory_path: str) -> (np.array, np.array):
+    """Функция получения представления изображений в цифровом виде"""
+    X_data = []
+    y_data = []
+    img_path_list = get_path(directory_path)
+    for img_path in img_path_list:  # находимся на конкретном изображении из директории
+        img_tensor = cv2.imread(img_path)
+        X_data.append(img_tensor)  # добавили цифровое представление изображения
+        name = img_path[46: img_path.rfind('/')]
+        y_data.append(id_dict[name])  # добавили метку класса
+
+    return np.array(X_data), np.array(y_data)
+
+
+X, y = get_embeddings('/Users/alisultanov/Desktop/Обработанные фотки')
+
+
+
+def pickle_save(file_name: str, data: np.array) -> None:
+    """Функция сохранения эмбеддингов в формате .pkl
+    (используется как для X, так и для y)"""
+    with open(file_name, 'wb') as f:
+        pickle.dump(data, f, protocol=5)
+
+
+# pickle_save('embedings.pkl', X)
+# pickle_save('labels.pkl', y)
+
+
+with open('embedings.pkl', 'rb') as f_1:
+    embd = pickle.load(f_1)
+
+# with open('labels.pkl', 'rb') as f_2:
+#     lab = pickle.load(f_2)
+
+
+print(embd[0])
+
+# cv2.imshow(f'{lab[0]}', embd[0])
+# cv2.waitKey(0)
 
 
 # if __name__ == '__main__':
-#     face_detect('/Users/alisultanov/Desktop/Celebrities(2)', '/Users/alisultanov/Desktop/Обработанные фотки')
+#     global_resize('/Users/alisultanov/Desktop/Обработанные фотки')
+#     image_replace('/Users/alisultanov/Desktop/Celebrities(2)', '/Users/alisultanov/Desktop/Обработанные фотки')
+    # face_detect('/Users/alisultanov/Desktop/Celebrities(2)', '/Users/alisultanov/Desktop/Обработанные фотки')
+    # image_resize('/Users/alisultanov/Desktop/Celebrities/Gal Gadot/img505.jpg', 500, 500)
+    # get_data_information('/Users/alisultanov/Desktop/Celebrities')
+    # print(get_path('/Users/alisultanov/Desktop/Celebrities'))
