@@ -22,7 +22,8 @@ def get_data_information(directory_path: str) -> None:
 
 
 
-#if __name__ == '__main__':
-#    get_data_information('/Users/alisultanov/Desktop/Обработанные фотки')
+if __name__ == '__main__':
+    get_data_information('/Users/alisultanov/Desktop/Обработанные фотки')
 
     
+dfsdfsd
