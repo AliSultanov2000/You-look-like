@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
+print('fsfs')
 def get_links() -> set:
     """Функция, которая получает cсылки на знаменитостей из сайта"""
     url = 'https://www.theplace.ru/photos/'
@@ -26,6 +27,10 @@ def get_links() -> set:
 
 def save_image(urls: set) -> None:
     """Функция, которая по ссылкам на всех знаменитостей сохраняет изображения"""
+<<<<<<< HEAD
+=======
+
+>>>>>>> 026dfc03f7bda6a8e4b446af47652421bd4c4b49
     def save_func(im_link: str) -> None:
         """Функция, которая отвечает за сохранение изображения в указанную папку"""
         html_data = requests.get(im_link)
@@ -91,6 +96,13 @@ other_celebrities = ['alla_pugacheva', 'charlie_hunnam', 'jo_In_seong', 'channin
                      'snoop_dogg', 'peter_gallagher', 'pedro_pascal', 'samuel_smith']
 
 
+<<<<<<< HEAD
 if __name__ == '__main__':
     ls = get_links()
     save_image(ls)
+=======
+
+# if __name__ == '__main__':
+#     ls = get_links()
+#     save_image(ls)
+>>>>>>> 026dfc03f7bda6a8e4b446af47652421bd4c4b49
