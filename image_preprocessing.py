@@ -117,6 +117,7 @@ def pickle_save(file_name: str, data: np.array) -> None:
         pickle.dump(data, f, protocol=5)
 
 
+print('hi')
 if __name__ == '__main__':
     X, y = get_embeddings_and_labels('/Users/alisultanov/Desktop/Обработанные фотки')
     pickle_save('embeddings.pkl', X)
