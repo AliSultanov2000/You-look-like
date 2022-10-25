@@ -1,25 +1,28 @@
-Целью этого проекта является создание модели машинного обучения, которая по фотографии пользователя будет определять, на кого он похож из знаменитостей.
-Этапы проекта:
-1) Поиск данных (парсинг изображений)  
-2) Написание программы обработки изображения  
-3) Выбор оптимальной модели ML  
-4) Обучение модели ML (происходит в среде Google Colab, используется GPU)  
-5) Заключение модели ML в Docker - контейнер  
+The goal of this project is to create a machine learning model that will determine from a user's photo who he looks like from celebrities.
+Project stages:
+1) Data search (image parsing)  
+2) Writing an image processing program (in order to form a training and test sample)
+3) Choosing the optimal ML model  
+4) ML model training (takes place in Google Colab environment, GPU is used)  
+5) Conclusion of the ML model in a Docker container  
  
-Стек используемых технологий: Python, Keras, OpenCV, NumPy, face_recognition 
+The stack of technologies used: Python, Jupyter Notebook(Google Colab), Keras, OpenCV, NumPy, face_recognition
 
 
-В качестве модели машиного обучения была выбрана многослойная нейронная сеть.
-Для уменьшения переобучения используются слои Dropout. Для ускорения обучения - BatchNormalization.
-Функция активации во всех слоях сети, (кроме последнего слоя) - ELU
+A multilayer neural network was chosen as a machine learning model.
+Dropout layers are used to reduce overfitting. To speed up learning - Batch Normalization.
+Activation function in all layers of the network, (except the last layer) - ELU
 
-Обучение модели многослойной нейронной сети проводилось в среде Google Colab, с использованием GPU. Далее вся модель (веса, состояние оптимизатора а также другие параметры) была сохранена на локальном компьютере, с целью создания пайплайна, а также развёртывания модели в Docker-контейнер.
+The training of the multilayer neural network model was carried out in the Google Colab environment, using GPU. Next, the entire model (weights, state of the optimizer, and other parameters) was saved on the local computer, in order to create a pipeline, as well as deploy the model to a Docker container.
 
-Пайплайн:
- - Анализ изображнения библиотекой face_recognition на предмет распознавания лица 
- - Если лицо на изображении распознано, вырезаем из изображения всё лишнее, оставляем только лицо
- - Изменяем изображение лица до 170х170 пикселей
- - Передаём ресайз-изображение в функцию face_encodings библиотеки face_recognitions, в итоге всё изображения кодируется в виде вектора размера 128х1
- - Передаём закодированное в виде вектора изображение на вход нейросети
- - На выходном слое нейросети 233 нейрона, выходные значения которых представляют вероятность принадлежности к конкретному классу (классом является определённая знаменитость), функцией активации выходного слоя является Softmax
- - Из выходных значений последнего слоя нейросети берём максимальное, индекс максимального значения является номером класса - это и является предсказанием нейросети по объекту. Для того чтобы выдать предсказание в виде строки, берём строку из словаря по текущему(максимальному) индексу. В конёчном счёте по строке (предсказанной метке) функция находит фотографию знаменитости из спарсенных данных и возвращает её.
+Pipeline:
+ - Image analysis by the face_recognition library for face recognition 
+ - If the face in the image is recognized, we cut out everything superfluous from the image, leaving only the face
+ - We change the face image to 170x170 pixels
+ - We pass the resize-images to the face_encodings function of the face_recognition library, as a result, all images are encoded as a vector of size 128x1
+ - We transmit the image encoded as a vector to the input of the neural network
+ - There are 233 neurons on the output layer of the neural network, the output values of which represent the probabilities of belonging to a particular class (a certain celebrity is a class), the activation function of the output layer is Softmax
+ - From the output values of the last layer of the neural network, we take the maximum, the index of the maximum value is the class number - this is the prediction of the neural network for the object. In order to make a prediction in the form of a string, we take a string from the dictionary by the current (maximum) index. Ultimately, the function find a photo of a celebrity from the found images  by the line (the predicted label) and returns it.
+
+As a result of the project, a model with a multilayer neural network architecture was obtained (the number of layers is optimal), which was trained on high-quality data and, as a result, has a high metric (accuracy) on test data. As well as a fully formed pipeline from image processing to the final prediction of the model. 
+The model within the project was packaged in a Docker container for further use
