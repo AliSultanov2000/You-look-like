@@ -4,7 +4,8 @@ Project stages:
 2) Writing an image processing program (in order to form a training and test sample)
 3) Choosing the optimal ML model  
 4) ML model training (takes place in Google Colab environment, GPU is used)  
-5) Conclusion of the ML model in a Docker container  
+5) ML model pipeline formation
+6) Conclusion of the ML model in a Docker container  
  
 The stack of technologies used: Python, Jupyter Notebook(Google Colab), Keras, OpenCV, NumPy, face_recognition
 
