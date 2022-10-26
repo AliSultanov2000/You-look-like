@@ -1,0 +1,7 @@
+/env
+/dl_model_training.ipynb
+/data_parsing.py
+/data_information.py
+/data_preprocessing.py
+/embeddings.pkl
+/labels.pkl
