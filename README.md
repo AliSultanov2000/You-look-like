@@ -30,4 +30,4 @@ ML Pipeline:
 
 
 As a result of the project, a model with a multilayer neural network architecture was obtained (the number of layers is optimal), which was trained on high-quality data and, as a result, has a high metric (accuracy) on test data. As well as a fully formed pipeline from image processing to the final prediction of the model. 
-The model within the project was packaged in a Docker container for further use
+The model within the project was packaged in a Docker container for further use.
