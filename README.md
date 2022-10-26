@@ -7,7 +7,7 @@ Project stages:
 5) ML model pipeline formation
 6) Conclusion of the ML model in a Docker container  
  
-The stack of technologies used: Python, Jupyter Notebook(Google Colab), Keras, OpenCV, NumPy, face_recognition
+The stack of technologies used: Python, Docker, Jupyter Notebook(Google Colab), Keras, OpenCV, NumPy, face_recognition
 
 
 By translating the task into machine learning language, the task is a multi-class classification.  
