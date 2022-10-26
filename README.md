@@ -10,6 +10,9 @@ Project stages:
 The stack of technologies used: Python, Jupyter Notebook(Google Colab), Keras, OpenCV, NumPy, face_recognition
 
 
+By translating the task into machine learning language, the task is a multi-class classification
+The metric in the project is accuracy
+
 A multilayer neural network was chosen as a machine learning model.
 Dropout layers are used to reduce overfitting. To speed up learning - Batch Normalization.
 Activation function in all layers of the network, (except the last layer) - ELU
