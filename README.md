@@ -1,4 +1,4 @@
-The goal of this project is to create a machine learning model that will determine from a user's photo who he looks like from celebrities.
+The goal of this project is to create a machine learning model that will determine from a user's photo who he looks like from celebrities.  
 Project stages:  
 1) Data search (image parsing)  
 2) Writing an image processing program (in order to form a training and test sample)  
