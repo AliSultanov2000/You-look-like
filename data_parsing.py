@@ -4,10 +4,11 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
+DIRECTORY_PATH = '/Users/alisultanov/Desktop/Celebrities'  # here we store the raw images
+DESKTOP_PATH = '/Users/alisultanov/Desktop'
 
-print('fsfs')
 def get_links() -> set:
-    """Функция, которая получает cсылки на знаменитостей из сайта"""
+    """A function that gets celebrity links from a website"""
     url = 'https://www.theplace.ru/photos/'
     links = []
     r = requests.get(url)
@@ -26,19 +27,16 @@ def get_links() -> set:
 
 
 def save_image(urls: set) -> None:
-    """Функция, которая по ссылкам на всех знаменитостей сохраняет изображения"""
-<<<<<<< HEAD
-=======
-
->>>>>>> 026dfc03f7bda6a8e4b446af47652421bd4c4b49
+    """Function that links to all celebrities saves images"""
     def save_func(im_link: str) -> None:
-        """Функция, которая отвечает за сохранение изображения в указанную папку"""
+        """The function that is responsible for saving the image to the specified folder"""
         html_data = requests.get(im_link)
         html_data_cleaning = BeautifulSoup(html_data.text, 'html.parser')
         get_photo = requests.get('https://www.theplace.ru' + html_data_cleaning.find('div', class_='content-wrapper').find('img', class_='pic big_pic').get('src'))
-        with open(f"/Users/alisultanov/Desktop/img{counter}.jpg", "wb") as out:
+        photo_path = DESKTOP_PATH + f'/img{counter}.jpg'
+        with open(photo_path, "wb") as out:
             out.write(get_photo.content)
-        shutil.move(f"/Users/alisultanov/Desktop/img{counter}.jpg", path)
+        shutil.move(photo_path, path)
 
     counter = 0
     for url in urls:
@@ -46,7 +44,7 @@ def save_image(urls: set) -> None:
             r = requests.get(url)
             soap = BeautifulSoup(r.text, 'html.parser')
             name = soap.find('div', class_='col-xl-9 col-lg-8 col-md-7 col-sm-12 main-col-content').find('h1', class_='my-3').text
-            path = '/Users/alisultanov/Desktop/Celebrities' + f'/{name}'
+            path = DIRECTORY_PATH + f'/{name}'  # save all images in this path
             if not os.path.isdir(path):
                 os.mkdir(path)
             else:
@@ -54,20 +52,20 @@ def save_image(urls: set) -> None:
 
             images = soap.find('div', class_='gallery-pics-list photos-pics-list').find('div', class_='row').findAll('div', class_='col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 pb-3')
 
-            for image in images:  # обрабатываем первый блок фотографий
+            for image in images:  # processing the first block of images
                 counter += 1
                 im1_link = 'https://www.theplace.ru' + image.find('div', class_='photos-pic-card').find('a', class_='photos-pic-card__link').get('href')
                 save_func(im1_link)
 
-            # обрабатываем другие теги с фотографиями из сайта текущего человека
+            # processing other tags with photos from the site of the current person
             other_images = soap.find('div', class_='container-xl container-main').find('div', class_='row').find('div', class_='col-xl-9 col-lg-8 col-md-7 col-sm-12 main-col-content').find('div', class_='d-flex flex-wrap justify-content-center').findAll('div', class_='p-1')
             inner_counter = 1
-            for other_image in other_images:  # обрабатываем второй блок фотографий
+            for other_image in other_images:  # processing the second block of images
                 counter += 1
                 inner_counter += 1
                 im2_link = 'https://www.theplace.ru' + other_image.find('div', class_='gallery-photo-card').find('a').get('href')
                 save_func(im2_link)
-                if inner_counter == 21:  # берём только первые 20 фотографий из этого блока
+                if inner_counter == 21:  # take only the first 20 photos from this block
                     break
 
         except AttributeError:
@@ -96,13 +94,6 @@ other_celebrities = ['alla_pugacheva', 'charlie_hunnam', 'jo_In_seong', 'channin
                      'snoop_dogg', 'peter_gallagher', 'pedro_pascal', 'samuel_smith']
 
 
-<<<<<<< HEAD
 if __name__ == '__main__':
-    ls = get_links()
-    save_image(ls)
-=======
-
-# if __name__ == '__main__':
-#     ls = get_links()
-#     save_image(ls)
->>>>>>> 026dfc03f7bda6a8e4b446af47652421bd4c4b49
+    LINKS = get_links()
+    save_image(LINKS)
