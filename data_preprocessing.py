@@ -1,15 +1,18 @@
 import os
+import re
 import shutil
 import pickle
 import json
 import numpy as np
 import cv2
 import face_recognition
+from model_pipeline import json_load
 
-PROCESSED_IMAGES_PATH = '/Users/alisultanov/Desktop/Обработанные фотки'
+
+PROCESSED_IMAGES_PATH = json_load("directories_path.json")["PROCESSED_IMAGES_PATH"]
 
 
-def get_path(directory_path) -> list:
+def get_path(directory_path: str) -> list:
     """A function that gets links to all existing images"""
     img_path_list = []
     directories = os.listdir(directory_path)
@@ -27,14 +30,13 @@ def get_path(directory_path) -> list:
     return img_path_list
 
 
-def image_resize(img: np.ndarray, width: int | float, height: int | float) -> np.ndarray:
-    """A function that resizes face images to a standard size"""
-    return cv2.resize(img, (width, height))
-
-
-def image_save(img: np.ndarray, save_img_path: str) -> None:
-    """A function that saves an image"""
-    cv2.imwrite(save_img_path, img)
+def get_name(img_path: str) -> str:
+    """A function that pulls a person's name from the path to the image"""
+    delimiters = list(re.finditer("/", img_path))  # finding everything / in the path to the img file (to find a person's name)
+    first_delimiter = delimiters[-2].span()[0]
+    second_delimiter = delimiters[-1].span()[0] + 1
+    name = img_path[first_delimiter + 1: second_delimiter - 1]
+    return name
 
 
 def face_detect(directory_path: str, new_directory_path: str) -> None:
@@ -53,14 +55,13 @@ def face_detect(directory_path: str, new_directory_path: str) -> None:
                 width = face_location[0][1] - face_location[0][3]
                 height = face_location[0][2] - face_location[0][0]
                 img = img[face_location[0][0] - height // 3: face_location[0][0] + height, face_location[0][3]: face_location[0][3] + width]
-                img = image_resize(img, 170, 170)
-
-                name = img_path[42: img_path.rfind('/')]
+                img = cv2.resize(img, (170, 170))
+                name = get_name(img_path)
                 name_path = new_directory_path + '/' + name
                 if not os.path.isdir(name_path):
                     os.mkdir(name_path)
                 new_img_path = name_path + img_path[img_path.rfind('/'):]
-                image_save(img, new_img_path)
+                cv2.imwrite(new_img_path, img)
                 os.remove(img_path)  # we delete the image from the old file
 
             except cv2.error:
@@ -69,15 +70,18 @@ def face_detect(directory_path: str, new_directory_path: str) -> None:
             print(f'Several faces have been detected in the image: {img_path}')
 
 
-def image_replace(directory_path: str) -> None:
-    """Function for transferring an image from the img_path directory to final_img_path"""
+def image_replace(directory_path: str, new_directory_path: str) -> None:
+    """Function of transferring images from directory_path to new_directory_path"""
     img_path_list = get_path(directory_path)
     for img_path in img_path_list:
         try:
-            new_img_path = img_path.replace('Celebrities(2)', 'Обработанные фотки')
+            delimiters = list(re.finditer("/", img_path))
+            delimiter = delimiters[-2].span()[0]
+            short_img_path = img_path[delimiter:]
+            new_img_path = new_directory_path + short_img_path
             shutil.move(img_path, new_img_path)
         except FileNotFoundError:
-            print(f'There is no directory for this image: {img_path}')
+            print(f'There is no directory for this image: {img_path}') 
 
 
 def get_id(directory_path: str) -> dict:
@@ -112,7 +116,7 @@ def get_embeddings_and_labels(directory_path: str) -> (np.array, np.array):
         if not img:
             continue
         X_data = np.vstack((X_data, img))  # added a digital representation of the image
-        name = img_path[46: img_path.rfind('/')]
+        name = get_name(img_path)
         y_data.append(ID_PERSON[name])  # added a class label
     X_data = X_data[1:]
     return np.array(X_data), np.array(y_data)

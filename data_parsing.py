@@ -3,9 +3,12 @@ import shutil
 import time
 import requests
 from bs4 import BeautifulSoup
+from model_pipeline import json_load
 
-DIRECTORY_PATH = '/Users/alisultanov/Desktop/Celebrities'  # here we store the raw images
-DESKTOP_PATH = '/Users/alisultanov/Desktop'
+DIRECTORY_PATH = json_load("directories_path.json")['DIRECTORY_PATH']  # here we store the raw images
+DESKTOP_PATH = json_load("directories_path.json")['DESKTOP_PATH']
+
+WEBSITE_LINK = 'https://www.theplace.ru'
 
 def get_links() -> set:
     """A function that gets celebrity links from a website"""
@@ -17,7 +20,7 @@ def get_links() -> set:
     for celebrity in celebrities:
         try:
             link = celebrity.find('div', class_='model-item').find('a', class_='model-link').get('href')
-            links.append('https://www.theplace.ru' + link)
+            links.append(WEBSITE_LINK + link)
 
         except AttributeError:
             continue
@@ -32,7 +35,7 @@ def save_image(urls: set) -> None:
         """The function that is responsible for saving the image to the specified folder"""
         html_data = requests.get(im_link)
         html_data_cleaning = BeautifulSoup(html_data.text, 'html.parser')
-        get_photo = requests.get('https://www.theplace.ru' + html_data_cleaning.find('div', class_='content-wrapper').find('img', class_='pic big_pic').get('src'))
+        get_photo = requests.get(WEBSITE_LINK + html_data_cleaning.find('div', class_='content-wrapper').find('img', class_='pic big_pic').get('src'))
         photo_path = DESKTOP_PATH + f'/img{counter}.jpg'
         with open(photo_path, "wb") as out:
             out.write(get_photo.content)
@@ -54,7 +57,7 @@ def save_image(urls: set) -> None:
 
             for image in images:  # processing the first block of images
                 counter += 1
-                im1_link = 'https://www.theplace.ru' + image.find('div', class_='photos-pic-card').find('a', class_='photos-pic-card__link').get('href')
+                im1_link = WEBSITE_LINK + image.find('div', class_='photos-pic-card').find('a', class_='photos-pic-card__link').get('href')
                 save_func(im1_link)
 
             # processing other tags with photos from the site of the current person
@@ -63,7 +66,7 @@ def save_image(urls: set) -> None:
             for other_image in other_images:  # processing the second block of images
                 counter += 1
                 inner_counter += 1
-                im2_link = 'https://www.theplace.ru' + other_image.find('div', class_='gallery-photo-card').find('a').get('href')
+                im2_link = WEBSITE_LINK + other_image.find('div', class_='gallery-photo-card').find('a').get('href')
                 save_func(im2_link)
                 if inner_counter == 21:  # take only the first 20 photos from this block
                     break
@@ -74,8 +77,8 @@ def save_image(urls: set) -> None:
 
 
 other_celebrities = ['alla_pugacheva', 'charlie_hunnam', 'jo_In_seong', 'channing_tatum',  'constance_wu',
-                   'cee_lo_green', 'christian_bale', 'chris_evans', 'cillian_murphy', 'colin_farrel', 'bella_hadid', 'barack_obama',
-                   'bradley_cooper', 'bred_pitt', 'bruce_willis', 'dakota_johnson',  'pitbull', 'shia_labeouf', 'kit_harington',
+                     'cee_lo_green', 'christian_bale', 'chris_evans', 'cillian_murphy', 'colin_farrel', 'bella_hadid', 'barack_obama',
+                     'bradley_cooper', 'bred_pitt', 'bruce_willis', 'dakota_johnson',  'pitbull', 'shia_labeouf', 'kit_harington',
                      'nargis_fakhri', 'kate_clapp',  'alison_sudol', 'james_franco', 'jake_gyllenhaal', 'jamie_dornan', 'renee_lacombe', 'robbie_willams',
                      'jensen_ackles', 'jesse_eisenberg', 'jim_parsons', 'justin_timberlake', 'justin_bieber', 'lindsay_ellingson',
                      'leonardo_dicaprio', 'luke_evans', 'luis_fonsi', 'orlando_bloom', 'venus_williams', 'robert_downey_jr', 'vin_diesel',

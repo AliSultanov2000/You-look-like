@@ -8,7 +8,6 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 from keras import models
 
 
-
 def json_load(file_name: str) -> dict:
     """json file upload function"""
     with open(file_name, 'r') as file:
@@ -18,6 +17,7 @@ def json_load(file_name: str) -> dict:
 ID_DICT = json_load('celebrities.json')
 
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
+
 
 def ml_pipeline(img_path: str) -> str:
     """The function of predicting the model for this object"""

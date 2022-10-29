@@ -1,7 +1,8 @@
 import os
 import pickle
+from model_pipeline import json_load
 
-PROCESSED_IMAGES_PATH = '/Users/alisultanov/Desktop/Обработанные фотки'
+PROCESSED_IMAGES_PATH = json_load("directories_path.json")['PROCESSED_IMAGES_PATH']
 
 def get_information(directory_path: str) -> None:
     """A function that prints the number of classes,
@@ -28,7 +29,6 @@ def get_dataset_information(dataset_path: str) -> None:
     with open(dataset_path, 'rb') as file:
         dataset = pickle.load(file)
         print(f'Dataset size: {len(dataset)} objects')
-
 
 
 if __name__ == '__main__':
