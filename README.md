@@ -12,7 +12,7 @@ The stack of technologies used: Python, Docker, Jupyter Notebook(Google Colab), 
 By translating the task into machine learning language, the task is a multi-class classification.  
 The metric in the project is accuracy.  
   
-A multilayer neural network was chosen as a machine learning model.  
+A multilayer neural network was chosen as a machine learning model.  Based on the logic of the problem, the accuracy of the prediction of the neural network model is more important than the speed.  
 Dropout layers are used to reduce overfitting. To speed up learning - Batch Normalization.  
 Activation function in all layers of the network, (except the last layer) - ELU.  
 The training of the multilayer neural network model was carried out in the Google Colab environment, using GPU. Next, the entire model (weights, state of the optimizer, and other parameters) was saved on the local computer, in order to create a pipeline, as well as deploy the model to a Docker container. 
