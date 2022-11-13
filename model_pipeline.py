@@ -4,6 +4,7 @@ import numpy as np
 import logging
 import json
 import os
+import random
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 from keras import models
 
@@ -15,6 +16,7 @@ def json_load(file_name: str) -> dict:
 
 
 ID_DICT = json_load('celebrities.json')
+DIRECTORY_PATH = json_load('directories_path.json')['DIRECTORY_PATH']
 
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
@@ -33,13 +35,18 @@ def ml_pipeline(img_path: str) -> str:
 
         else:
             logging.info('A prediction is formed...')
-            width = face_location[0][1] - face_location[0][3]
-            height = face_location[0][2] - face_location[0][0]
+            height, width = face_location[0][2] - face_location[0][0], face_location[0][1] - face_location[0][3]
             img = img[face_location[0][0] - height // 3: face_location[0][0] + height, face_location[0][3]: face_location[0][3] + width]
             img = cv2.resize(img, (170, 170))
             img_encoded = face_recognition.face_encodings(img)
             prediction = ID_DICT[str(model.predict(np.array(img_encoded), verbose=0).argmax())]
-            return f'The person in the image looks like: {prediction}'
+            celebrity_path = DIRECTORY_PATH + "/" + prediction
+            celebrity_img_path = random.choice(os.listdir(celebrity_path))
+            show_celebrity_image = celebrity_path + "/" + celebrity_img_path
+            img_predict = cv2.imread(show_celebrity_image)
+            cv2.imshow(f'You look like: {prediction}', img_predict)
+            cv2.waitKey(0)
+
     except TypeError:
         return f'Error when getting a link to an image'
     except cv2.error:
@@ -48,4 +55,4 @@ def ml_pipeline(img_path: str) -> str:
 
 if __name__ == '__main__':
     model = models.load_model('dl_model')
-    print(ml_pipeline(''))
+    ml_pipeline("")
