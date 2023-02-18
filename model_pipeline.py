@@ -21,7 +21,7 @@ DIRECTORY_PATH = json_load('directories_path.json')['DIRECTORY_PATH']
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
 
-def ml_pipeline(img_path: str) -> str:
+def pipeline(img_path: str) -> str:
     """The function of predicting the model for this object"""
     logging.info('Search for a face in an image')
     try:
@@ -55,4 +55,4 @@ def ml_pipeline(img_path: str) -> str:
 
 if __name__ == '__main__':
     model = models.load_model('dl_model')
-    ml_pipeline("")
+    pipeline("")
