@@ -5,9 +5,9 @@ Project stages:
 3) Choosing the optimal ML model  
 4) ML model training (takes place in Google Colab environment, GPU is used)  
 5) ML model pipeline formation  
-6) Conclusion of the ML model in a Docker container  
+6) Saving the entire pipeline in Docker Image  
   
-The stack of technologies used: Python, Docker, Jupyter Notebook(Google Colab), Keras, OpenCV, NumPy, face_recognition  
+The stack of technologies used: Python, Docker, Jupyter Notebook(Google Colab), Keras, TensorFlow, OpenCV, NumPy, face_recognition  
   
 By translating the task into machine learning language, the task is a multi-class classification.  
 The metric in the project is accuracy.  
@@ -17,7 +17,7 @@ Dropout layers are used to reduce overfitting. To speed up learning - Batch Norm
 Activation function in all layers of the network, (except the last layer) - ELU.  
 The training of the multilayer neural network model was carried out in the Google Colab environment, using GPU. Next, the entire model (weights, state of the optimizer, and other parameters) was saved on the local computer, in order to create a pipeline, as well as deploy the model to a Docker container. 
   
-Explanation:
+how does it work?
  - Image analysis by the face_recognition library for face recognition  
  - If the face in the image is recognized, we cut out everything superfluous from the image, leaving only the face  
  - We change the face image to 170x170 pixels  
