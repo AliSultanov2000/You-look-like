@@ -17,7 +17,7 @@ Dropout layers are used to reduce overfitting. To speed up learning - Batch Norm
 Activation function in all layers of the network, (except the last layer) - ELU.  
 The training of the multilayer neural network model was carried out in the Google Colab environment, using GPU. Next, the entire model (weights, state of the optimizer, and other parameters) was saved on the local computer, in order to create a pipeline, as well as deploy the model to a Docker container. 
   
-ML Pipeline:
+Explanation:
  - Image analysis by the face_recognition library for face recognition  
  - If the face in the image is recognized, we cut out everything superfluous from the image, leaving only the face  
  - We change the face image to 170x170 pixels  
@@ -26,4 +26,4 @@ ML Pipeline:
  - There are 233 neurons on the output layer of the neural network, the output values of which represent the probabilities of belonging to a particular class (a certain celebrity is a class), the activation function of the output layer is Softmax. From the output values of the last layer of the neural network, we take the maximum, the index of the maximum value is the class number - this is the prediction of the neural network for the object. In order to make a prediction in the form of a string, we take a string from the dictionary by the current (maximum) index  
  
  As a result of the project, a model with a multilayer neural network architecture was obtained (the number of layers is optimal), which was trained on high-quality data and, as a result, has a high metric (accuracy) on test data. As well as a fully formed pipeline from image processing to the final prediction of the model.   
- The model within the project was packaged in a Docker container for further use.  
+ The model within the project was packaged in a Docker image for further use.  
