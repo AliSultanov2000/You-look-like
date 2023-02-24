@@ -1,5 +1,5 @@
 {
-  "PROCESSED_IMAGES_PATH": "/Users/alisultanov/Desktop/Обработанные фотки",
-  "DIRECTORY_PATH": "/Users/alisultanov/Desktop/Celebrities",
-  "DESKTOP_PATH": "/Users/alisultanov/Desktop"
+  "PROCESSED_IMAGES_PATH": "../alisultanov/Processed",
+  "DIRECTORY_PATH": "../alisultanov/Celebrities",
+  "DESKTOP_PATH": "../alisultanov/Desktop"
 }
