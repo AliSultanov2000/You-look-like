@@ -17,7 +17,7 @@ Dropout layers are used to reduce overfitting. To speed up learning - Batch Norm
 Activation function in all layers of the network, (except the last layer) - ELU.  
 The training of the multilayer neural network model was carried out in the Google Colab environment, using GPU. Next, the entire model (weights, state of the optimizer, and other parameters) was saved on the local computer, in order to create a pipeline, as well as deploy the model to a Docker container. 
   
-how does it work?
+How does it work?
  - Image analysis by the face_recognition library for face recognition  
  - If the face in the image is recognized, we cut out everything superfluous from the image, leaving only the face  
  - We change the face image to 170x170 pixels  
